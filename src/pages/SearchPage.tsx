@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { getData, Sick } from '../apis/getSick';
+import { getSick, Sick } from '../apis/getSick';
 import BoldResult from '../components/BoldText';
 import { createDebounce } from '../utils/createDebounce';
 
-const lazyGetSick = createDebounce(getData, 500);
+const lazyGetSick = createDebounce(getSick, 500);
 
 const SearchPage = () => {
   const [searchValue, setSearchValue] = useState('');
