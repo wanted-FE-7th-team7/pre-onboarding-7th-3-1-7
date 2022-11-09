@@ -1,7 +1,14 @@
 import React from 'react';
+import SearchPage from './pages/SearchPage';
+import GlobalStyle from './styles/GlobalStyle';
 
 function App() {
-  return <div className="App">여기에 앱을 작성해주세요.</div>;
+  return (
+    <>
+      <GlobalStyle />
+      <SearchPage />
+    </>
+  );
 }
 
 export default App;
