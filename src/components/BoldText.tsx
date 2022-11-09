@@ -1,3 +1,5 @@
+import styled from 'styled-components';
+
 interface Props {
   rawText: string;
   boldTarget: string;
@@ -7,14 +9,20 @@ const BoldResult = ({ rawText, boldTarget }: Props) => {
   const startIndex = rawText.search(reg);
   const endIndex = startIndex + boldTarget.length;
 
-  if (startIndex === -1) return <p>{rawText}</p>;
+  if (startIndex === -1) return <S.Text>{rawText}</S.Text>;
   return (
-    <p>
+    <S.Text>
       {rawText.slice(0, startIndex)}
       <strong>{rawText.slice(startIndex, endIndex)}</strong>
       {rawText.slice(endIndex)}
-    </p>
+    </S.Text>
   );
+};
+
+const S = {
+  Text: styled.p`
+    font-size: 2rem;
+  `,
 };
 
 export default BoldResult;

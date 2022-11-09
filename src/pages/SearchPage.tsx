@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import styled from 'styled-components';
 import { getData, Sick } from '../apis/getSick';
 import BoldResult from '../components/BoldText';
 import { createDebounce } from '../utils/createDebounce';
@@ -6,14 +7,14 @@ import { createDebounce } from '../utils/createDebounce';
 const lazyGetSick = createDebounce(getData, 500);
 
 const SearchPage = () => {
-  const [searchInput, setSearchInput] = useState('');
+  const [searchValue, setSearchValue] = useState('');
   const [sickList, setSickList] = useState<Sick[]>([]);
   const target = useRef('');
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = async ({
     target: { value },
   }) => {
-    setSearchInput(value);
+    setSearchValue(value);
 
     const { data } = await lazyGetSick(value);
 
@@ -27,9 +28,9 @@ const SearchPage = () => {
 
   return (
     <div>
-      <input
+      <S.SearchInput
         placeholder="질환명을 입력해주세요."
-        value={searchInput}
+        value={searchValue}
         onChange={handleChange}
       />
       {sickList.map(sick => (
@@ -43,4 +44,9 @@ const SearchPage = () => {
   );
 };
 
+const S = {
+  SearchInput: styled.input`
+    font-size: 2rem;
+  `,
+};
 export default SearchPage;
