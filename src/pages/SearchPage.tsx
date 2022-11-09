@@ -16,7 +16,7 @@ const SearchPage = () => {
   }) => {
     setSearchValue(value);
 
-    const { data } = await lazyGetSick(value);
+    const data = await lazyGetSick(value);
 
     target.current = value;
     if (value !== '') {
