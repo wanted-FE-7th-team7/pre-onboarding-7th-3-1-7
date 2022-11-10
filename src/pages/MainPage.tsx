@@ -11,7 +11,7 @@ export default function MainPage() {
   useEffect(() => {
     (async () => {
       const data = await getSearchResult(searchKeyword);
-      setSearchResult(data ? data : []);
+      setSearchResult(data);
     })();
   }, [searchKeyword]);
   return (
