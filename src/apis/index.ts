@@ -5,7 +5,7 @@ import { Sick } from '../interfaces';
 const API_ENDPOINT = 'http://localhost:4000';
 const MAX_AGE = 6000;
 
-export const getSearchResult = async (query: string) => {
+export const getSickList = async (query: string) => {
   // cache와 일치하는지 찾음
   if (getMyCacheData(query)) {
     return getMyCacheData(query);

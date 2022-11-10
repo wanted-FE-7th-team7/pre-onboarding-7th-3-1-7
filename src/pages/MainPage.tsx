@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { getSearchResult } from '../apis';
+import { getSickList } from '../apis';
 import SearchInput from '../components/SearchInput';
 import { useDebounce } from '../hooks/useDebounce';
 import { Sick } from '../interfaces';
@@ -15,7 +15,7 @@ export default function MainPage() {
   useEffect(() => {
     (async () => {
       if (debouncedKeyword.trim()) {
-        const data = await getSearchResult(debouncedKeyword);
+        const data = await getSickList(debouncedKeyword);
         setSearchResult(data);
       } else {
         setSearchResult([]);
