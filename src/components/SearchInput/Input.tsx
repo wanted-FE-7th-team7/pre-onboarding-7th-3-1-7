@@ -16,7 +16,7 @@ export default function Input({ value, onChange }: Props) {
         placeholder={PLACEHOLDER_SEARCH_INPUT}
         onChange={onChange}
       />
-      <S.SearchButton />
+      <S.SearchButton>검색</S.SearchButton>
     </>
   );
 }
@@ -24,7 +24,7 @@ export default function Input({ value, onChange }: Props) {
 const S = {
   Input: styled.input`
     border-radius: 42rem;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     height : 7.3rem;
     border : none;
 }`,
@@ -33,10 +33,12 @@ const S = {
     right: 8px;
     top: 1.3rem;
     height: 5px;
-    background-color: #007be9;
     width: 4.8rem;
     height: 4.8rem;
     border: 0px;
     border-radius: 50%;
+    background-color: #007be9;
+    color: #ffffff;
+    font-weight: 700;
   `,
 };
