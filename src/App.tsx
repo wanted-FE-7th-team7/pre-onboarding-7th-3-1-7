@@ -1,7 +1,14 @@
 import React from 'react';
-
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { SearchPage } from './pages/SearchPage';
 function App() {
-  return <div className="App">여기에 앱을 작성해주세요.</div>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<SearchPage />} path="/" />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
