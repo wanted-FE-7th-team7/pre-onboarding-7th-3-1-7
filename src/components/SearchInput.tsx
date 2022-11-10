@@ -41,13 +41,15 @@ function SearchInput() {
           <li key={`0${input}`}>
             <BoldText>{input}</BoldText>
           </li>
-          {suggestions.map(({ sickCd, sickNm }) => (
-            <SuggestionDropdown
-              key={sickCd}
-              sickNm={sickNm}
-              target={prevQuery.current}
-            />
-          ))}
+          {hasNoSuggestions && <BoldText>검색어 없음</BoldText>}
+          {!hasNoSuggestions &&
+            suggestions.map(({ sickCd, sickNm }) => (
+              <SuggestionDropdown
+                key={sickCd}
+                sickNm={sickNm}
+                target={prevQuery.current}
+              />
+            ))}
         </StyledSuggestionBox>
       )}
     </>
