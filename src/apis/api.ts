@@ -10,13 +10,13 @@ export const http = axios.create({
 });
 
 export const getSearch = (searchValue: string, setSearchData: any) => {
-  const URL = `?q=${searchValue}`;
-
   http
-    .get(URL)
+    .get(`?q=${searchValue}`)
     .then(res => {
       console.info('calling api');
       setSearchData(res.data);
     })
-    .catch(error => {});
+    .catch(error => {
+      console.log(error);
+    });
 };

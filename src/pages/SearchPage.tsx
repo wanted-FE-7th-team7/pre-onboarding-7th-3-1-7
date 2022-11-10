@@ -6,6 +6,7 @@ import { getSearch } from '../apis/api';
 interface Props {
   set: boolean;
 }
+
 export function SearchPage() {
   const [set, setOn] = useState<boolean>(false);
   const [searchValue, setSearcValue] = useState('');
@@ -23,12 +24,12 @@ export function SearchPage() {
     target: { value: any };
     preventDefault: () => void;
   }) => {
-    const { value } = e.target;
-    setSearcValue(value);
+    setSearcValue(e.target.value);
     e.preventDefault();
+
     setTimeout(() => {
-      if (searchValue) getSearch(searchValue, setSearchData);
-    }, 200);
+      if (searchValue) getSearch(e.target.value, setSearchData);
+    }, 1000);
   };
 
   return (
@@ -47,11 +48,19 @@ export function SearchPage() {
             </S.Button>
           </S.SearchInner>
         </S.SearchWrap>
-
-        {searchData &&
-          searchData.map((sick: any) => (
-            <S.li key={sick.sickCd}>{sick.sickNm}</S.li>
-          ))}
+        {searchValue.length > 0 ? (
+          <S.SearchBox>
+            {searchData &&
+              searchData.map((sick: any) => (
+                <S.li key={sick.sickCd}>
+                  <BsSearch color="#605959" />
+                  {sick.sickNm}
+                </S.li>
+              ))}
+          </S.SearchBox>
+        ) : (
+          <div />
+        )}
       </S.MainCenter>
     </S.MainWrap>
   );
@@ -77,7 +86,7 @@ const S = {
 
   Title: styled.h1`
     display: flex;
-    font-size: 1.25rem;
+    font-size: 2rem;
     font-weight: 700;
     letter-spacing: -0.018em;
     line-height: 1.6;
@@ -89,7 +98,7 @@ const S = {
   `,
   SearchWrap: styled.div`
     display: flex;
-    max-width: 320px;
+    max-width: 490px;
     width: 100%;
     margin: 0 auto;
   `,
@@ -136,6 +145,14 @@ const S = {
       color: transparent;
     }
   `,
-
-  li: styled.li``,
+  SearchBox: styled.div`
+    margin: 15px;
+    list-style: none;
+    background-color: #ffff;
+    border-radius: 10px;
+  `,
+  li: styled.li`
+    justify-content: center;
+    padding: 10px;
+  `,
 };
