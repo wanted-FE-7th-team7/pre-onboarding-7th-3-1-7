@@ -9,7 +9,6 @@ export const getSearchResult = async (query: string) => {
     const res = await axios.get<Sick[]>(`${API_ENDPOINT}/sick`, {
       params: { q: query },
     });
-    console.log(res.data);
     return res.data;
   } catch (e) {
     console.error(e);

@@ -13,7 +13,7 @@ export default function SearchInput({ value, options, onChange }: Props) {
   return (
     <S.InputWrapper>
       <Input value={value} onChange={onChange} />
-      <Selector options={options} />
+      <Selector value={value} options={options} />
     </S.InputWrapper>
   );
 }

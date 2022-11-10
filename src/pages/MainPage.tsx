@@ -2,18 +2,27 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getSearchResult } from '../apis';
 import SearchInput from '../components/SearchInput';
+import { useDebounce } from '../hooks/useDebounce';
 import { Sick } from '../interfaces';
 
+const DEBOUNCED_MS = 1000;
+
 export default function MainPage() {
-  const [searchKeyword, setSearchKeyword] = useState<string>('담낭');
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [searchResult, setSearchResult] = useState<Sick[]>([]);
+  const debouncedKeyword = useDebounce<string>(searchKeyword, DEBOUNCED_MS);
 
   useEffect(() => {
     (async () => {
-      const data = await getSearchResult(searchKeyword);
-      setSearchResult(data);
+      if (debouncedKeyword) {
+        const data = await getSearchResult(debouncedKeyword);
+        setSearchResult(data);
+      } else {
+        setSearchResult([]);
+      }
     })();
-  }, [searchKeyword]);
+  }, [debouncedKeyword]);
+
   return (
     <S.Wrapper>
       <SearchInput

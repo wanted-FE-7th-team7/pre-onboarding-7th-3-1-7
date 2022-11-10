@@ -1,22 +1,25 @@
 import styled from 'styled-components';
 import { Sick } from '../../interfaces';
 
-const TEXT_SELECTOR = '최근 검색어';
-
 interface Props {
+  value: string;
   options: Sick[];
 }
 
-export default function InputSelector({ options }: Props) {
+export default function InputSelector({ value, options }: Props) {
   return (
     <S.SelectorWrapper>
       <>
-        <S.SelectorText>{TEXT_SELECTOR}</S.SelectorText>
-        {options.map(option => (
-          <S.SelectorOption key={option.sickCd}>
-            {option.sickNm}
-          </S.SelectorOption>
-        ))}
+        {options.map(option => {
+          const [before, after] = option.sickNm.split(value);
+          return (
+            <S.Option key={option.sickCd}>
+              <S.OptionText>{before}</S.OptionText>
+              <S.OptionBold>{value}</S.OptionBold>
+              <S.OptionText>{after}</S.OptionText>
+            </S.Option>
+          );
+        })}
       </>
     </S.SelectorWrapper>
   );
@@ -32,16 +35,22 @@ const S = {
     display: flex;
     flex-direction: column;
   `,
-  SelectorText: styled.span`
-    color: gray;
-    font-weight: 700;
-    font-size: 1.6rem;
-  `,
-  SelectorOption: styled.span`
-    display: flex;
+
+  Option: styled.div``,
+
+  OptionText: styled.span`
+    display: inline-flex;
     align-items: center;
     height: 3.2rem;
     font-size: 1.6rem;
-    font-weight: 700;
+    font-weight: normal;
+  `,
+
+  OptionBold: styled.span`
+    display: inline-flex;
+    align-items: center;
+    height: 3.2rem;
+    font-size: 1.6rem;
+    font-weight: 900;
   `,
 };
