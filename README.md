@@ -68,3 +68,5 @@ export default useLazyFetch;
 - 윗방향
 - 엔터
 - ESC
+
+![프리온보딩-과제-한국임상](https://user-images.githubusercontent.com/88099590/201021434-36c81901-a8a2-4187-be22-3445d634c20d.gif)
