@@ -1,19 +1,21 @@
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Sick } from '../../interfaces';
 
 interface Props {
   value: string;
+  selected: number | null;
   options: Sick[];
 }
 
-export default function InputSelector({ value, options }: Props) {
+export default function InputSelector({ value, options, selected }: Props) {
   return (
     <S.SelectorWrapper>
       <>
-        {options.map(option => {
+        {options.map((option, index) => {
           const [before, after] = option.sickNm.split(value);
           return (
-            <S.Option key={option.sickCd}>
+            <S.Option selected={selected === index} key={option.sickCd}>
               <S.OptionText>{before}</S.OptionText>
               <S.OptionBold>{value}</S.OptionBold>
               <S.OptionText>{after}</S.OptionText>
@@ -34,9 +36,12 @@ const S = {
     border-radius: 2.4rem;
     display: flex;
     flex-direction: column;
+    padding: 1.6rem 0;
   `,
 
-  Option: styled.div``,
+  Option: styled.div<{ selected: boolean }>`
+    background-color: ${({ selected }) => (selected ? '#eeeeee' : '#ffffff')};
+  `,
 
   OptionText: styled.span`
     display: inline-flex;
