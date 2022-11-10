@@ -32,6 +32,7 @@ export default function MainPage() {
         onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
           setSearchKeyword(e.currentTarget.value);
         }}
+        keyword={debouncedKeyword}
         options={searchResult}
       />
     </S.Wrapper>

@@ -7,10 +7,16 @@ import Selector from './Selector';
 interface Props {
   options: Sick[];
   value: string;
+  keyword: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function SearchInput({ value, options, onChange }: Props) {
+export default function SearchInput({
+  value,
+  keyword,
+  options,
+  onChange,
+}: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   // 키보드 이벤트 핸들러
   useEffect(() => {
@@ -42,7 +48,7 @@ export default function SearchInput({ value, options, onChange }: Props) {
   return (
     <S.InputWrapper>
       <Input value={value} onChange={onChange} />
-      <Selector selected={selectedIndex} value={value} options={options} />
+      <Selector selected={selectedIndex} value={keyword} options={options} />
     </S.InputWrapper>
   );
 }

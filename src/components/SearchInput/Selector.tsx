@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Sick } from '../../interfaces';
 
@@ -11,18 +10,22 @@ interface Props {
 export default function InputSelector({ value, options, selected }: Props) {
   return (
     <S.SelectorWrapper>
-      <>
-        {options.map((option, index) => {
-          const [before, after] = option.sickNm.split(value);
-          return (
-            <S.Option selected={selected === index} key={option.sickCd}>
-              <S.OptionText>{before}</S.OptionText>
-              <S.OptionBold>{value}</S.OptionBold>
-              <S.OptionText>{after}</S.OptionText>
-            </S.Option>
-          );
-        })}
-      </>
+      <div>
+        {options.length ? (
+          options.map((option, index) => {
+            const [before, after] = option.sickNm.split(value);
+            return (
+              <S.Option selected={selected === index} key={option.sickCd}>
+                <S.OptionText>{before}</S.OptionText>
+                <S.OptionBold>{value}</S.OptionBold>
+                <S.OptionText>{after}</S.OptionText>
+              </S.Option>
+            );
+          })
+        ) : (
+          <S.OptionText>검색어 없음</S.OptionText>
+        )}
+      </div>
     </S.SelectorWrapper>
   );
 }
