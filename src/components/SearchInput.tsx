@@ -5,11 +5,14 @@ import { getSicks } from '../apis/Sicks.service';
 import { useDebounce } from '../hooks/useDebounce';
 import useHandleInputEvent from '../hooks/useHandleInputEvent';
 import { Sick } from '../types';
+import Loading from './Loading';
 import SuggestionDropdown from './SuggestionDropdown';
 
 function SearchInput() {
   const [input, setInput] = useState('');
   const [searchResult, setSearchResult] = useState<Sick[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const hasNoSuggestions = searchResult.length === 0;
   const debouncedKeyword = useDebounce<string>(input, DEBOUNCING_TIME);
 
@@ -27,6 +30,8 @@ function SearchInput() {
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
     resetIndex();
+    setSearchResult([]);
+    setIsLoading(true);
   };
 
   useEffect(() => {
@@ -37,6 +42,7 @@ function SearchInput() {
       } else {
         setSearchResult([]);
       }
+      setIsLoading(false);
     })();
   }, [debouncedKeyword]);
 
@@ -54,8 +60,11 @@ function SearchInput() {
       {isOpenDropdown && (
         <StyledSuggestionBox>
           <BoldText>{input}</BoldText>
-          {hasNoSuggestions && <BoldText>검색어 없음</BoldText>}
-          {!hasNoSuggestions &&
+          {isLoading ? (
+            <Loading />
+          ) : hasNoSuggestions ? (
+            <BoldText>검색어 없음</BoldText>
+          ) : (
             searchResult.map(({ sickCd, sickNm }, index) => (
               <SuggestionDropdown
                 key={sickCd}
@@ -66,7 +75,8 @@ function SearchInput() {
                   goToSuggestion(e, searchResult[index].sickNm)
                 }
               />
-            ))}
+            ))
+          )}
         </StyledSuggestionBox>
       )}
     </>

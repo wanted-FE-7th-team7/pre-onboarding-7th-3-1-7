@@ -3,8 +3,6 @@ import SearchInput from '../components/SearchInput';
 import StyledText from '../components/StyledText';
 import { flex } from '../styles/Common';
 
-interface Props {}
-
 function SearchPage() {
   const textArr = ['국내 모든 임상시험 검색하고', '온라인으로 참여하기'];
   return (
