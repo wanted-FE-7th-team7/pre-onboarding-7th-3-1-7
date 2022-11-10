@@ -1,21 +1,22 @@
-import { AxiosResponse } from 'axios';
 import { http, URLS } from './api';
-import { Cache, Sick } from '../types';
+import { Sick } from '../types';
+import { getMyCacheData, setMyCacheData } from '../cache';
 
-const cache: Cache = {};
-
-export const getSicksQuery = async (query: string) => {
-  if (cache[query]) {
-    console.info('use Cache');
-    return cache[query];
+export const getSicks = async (query: string) => {
+  if (getMyCacheData(query)) {
+    console.info('use Cached Data');
+    return getMyCacheData(query);
   }
 
-  console.info('calling api');
-  const { data }: AxiosResponse<Sick[]> = await http.get(URLS.SICK, {
-    params: { sickNm_like: query },
-  });
-
-  cache[query] = data;
-
-  return data;
+  try {
+    console.info('api 호출');
+    const res = await http.get<Sick[]>(URLS.SICK, {
+      params: { sickNm_like: query },
+    });
+    setMyCacheData(query, res.data);
+    return res.data;
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
 };

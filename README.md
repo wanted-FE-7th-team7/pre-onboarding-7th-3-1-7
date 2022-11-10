@@ -11,7 +11,7 @@ API 콜 시점마다 캐쉬에 해당 쿼리에 해당하는 밸류가 존재하
 ```typescript
 const cache: Cache = {};
 
-export const getSicksQuery = async (query: string) => {
+export const getSicks = async (query: string) => {
   if (cache[query]) {
     console.info('use Cache');
     return cache[query];
@@ -49,7 +49,7 @@ function useLazyFetch() {
     clearTimeout(settimeout.current);
     settimeout.current = setTimeout(async () => {
       prevQuery.current = e.target.value;
-      const sicks = await getSicksQuery(e.target.value);
+      const sicks = await getSicks(e.target.value);
       setSuggestions([...sicks]);
     }, DEBOUNCING_TIME);
   };

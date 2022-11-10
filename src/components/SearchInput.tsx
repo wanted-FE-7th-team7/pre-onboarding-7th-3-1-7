@@ -1,11 +1,17 @@
+import { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { DEBOUNCING_TIME } from '../apis/api';
+import { getSicks } from '../apis/Sicks.service';
+import { useDebounce } from '../hooks/useDebounce';
 import useHandleInputEvent from '../hooks/useHandleInputEvent';
-import useLazyFetch from '../hooks/useLazyFetch';
+import { Sick } from '../types';
 import SuggestionDropdown from './SuggestionDropdown';
 
 function SearchInput() {
-  const { input, suggestions, handleOnChange, hasNoSuggestions, prevQuery } =
-    useLazyFetch();
+  const [input, setInput] = useState('');
+  const [searchResult, setSearchResult] = useState<Sick[]>([]);
+  const hasNoSuggestions = searchResult.length === 0;
+  const debouncedKeyword = useDebounce<string>(input, DEBOUNCING_TIME);
 
   const {
     handleKeyDown,
@@ -16,7 +22,23 @@ function SearchInput() {
     goToSuggestion,
     resetIndex,
     inputRef,
-  } = useHandleInputEvent(suggestions);
+  } = useHandleInputEvent(searchResult);
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+    resetIndex();
+  };
+
+  useEffect(() => {
+    (async () => {
+      if (debouncedKeyword.trim()) {
+        const data = await getSicks(debouncedKeyword);
+        setSearchResult(data);
+      } else {
+        setSearchResult([]);
+      }
+    })();
+  }, [debouncedKeyword]);
 
   return (
     <>
@@ -24,10 +46,7 @@ function SearchInput() {
         <input
           onFocus={handleOnFocus}
           onBlur={handleOnBlur}
-          onChange={e => {
-            handleOnChange(e);
-            resetIndex();
-          }}
+          onChange={handleOnChange}
           onKeyDown={e => handleKeyDown(e)}
           ref={inputRef}
         />
@@ -37,14 +56,14 @@ function SearchInput() {
           <BoldText>{input}</BoldText>
           {hasNoSuggestions && <BoldText>검색어 없음</BoldText>}
           {!hasNoSuggestions &&
-            suggestions.map(({ sickCd, sickNm }, index) => (
+            searchResult.map(({ sickCd, sickNm }, index) => (
               <SuggestionDropdown
                 key={sickCd}
                 sickNm={sickNm}
-                target={prevQuery.current}
+                target={debouncedKeyword}
                 isSelected={index === selectedIndex}
                 handleOnClick={e =>
-                  goToSuggestion(e, suggestions[index].sickNm)
+                  goToSuggestion(e, searchResult[index].sickNm)
                 }
               />
             ))}
