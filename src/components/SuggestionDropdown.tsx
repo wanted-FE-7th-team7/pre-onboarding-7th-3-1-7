@@ -16,11 +16,11 @@ const SuggestionDropdown = ({
 }: Props) => {
   const changeToBoldText = (target: string, str: string) => {
     const index = str.indexOf(target);
-    return [
-      str.slice(0, index),
-      str.slice(index, index + target.length),
-      str.slice(index + target.length),
-    ];
+    const prev = str.slice(0, index);
+    const cur = str.slice(index, index + target.length);
+    const next = str.slice(index + target.length);
+
+    return [prev, cur, next];
   };
 
   return (
@@ -35,7 +35,7 @@ const SuggestionDropdown = ({
 };
 
 export default SuggestionDropdown;
-export const BoldText = styled.span`
+const BoldText = styled.span`
   font-weight: 700;
 `;
 

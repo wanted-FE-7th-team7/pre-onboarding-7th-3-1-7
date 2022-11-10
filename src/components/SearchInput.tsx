@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import useHandleInputEvent from '../hooks/useHandleInputEvent';
 import useLazyFetch from '../hooks/useLazyFetch';
-import SuggestionDropdown, { BoldText } from './SuggestionDropdown';
+import SuggestionDropdown from './SuggestionDropdown';
 
 function SearchInput() {
   const { input, suggestions, handleOnChange, hasNoSuggestions, prevQuery } =
@@ -14,6 +14,8 @@ function SearchInput() {
     selectedIndex,
     isOpenDropdown,
     goToSuggestion,
+    resetIndex,
+    inputRef,
   } = useHandleInputEvent(suggestions);
 
   return (
@@ -22,15 +24,17 @@ function SearchInput() {
         <input
           onFocus={handleOnFocus}
           onBlur={handleOnBlur}
-          onChange={handleOnChange}
+          onChange={e => {
+            handleOnChange(e);
+            resetIndex();
+          }}
           onKeyDown={e => handleKeyDown(e)}
+          ref={inputRef}
         />
       </Wrapper>
       {isOpenDropdown && (
         <StyledSuggestionBox>
-          <li key={`0${input}`}>
-            <BoldText>{input}</BoldText>
-          </li>
+          <BoldText>{input}</BoldText>
           {hasNoSuggestions && <BoldText>검색어 없음</BoldText>}
           {!hasNoSuggestions &&
             suggestions.map(({ sickCd, sickNm }, index) => (
@@ -90,8 +94,15 @@ const StyledSuggestionBox = styled.ul`
     line-height: 4rem;
     text-decoration: none;
     color: #000000;
+    cursor: pointer;
+  }
+  li:hover {
+    background-color: #eeeeee;
   }
   .selected {
     background-color: #eeeeee;
   }
+`;
+const BoldText = styled.li`
+  font-weight: 700;
 `;
