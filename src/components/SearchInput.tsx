@@ -1,39 +1,29 @@
-import { KeyboardEvent, ChangeEvent, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { DEBOUNCING_TIME } from '../apis/api';
-import { getSicksQuery } from '../apis/Sicks.service';
-import { Sick } from '../types';
+import useHandleInputEvent from '../hooks/useHandleInputEvent';
+import useLazyFetch from '../hooks/useLazyFetch';
 import SuggestionDropdown, { BoldText } from './SuggestionDropdown';
 
 function SearchInput() {
-  const [input, setInput] = useState('');
-  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
-  const [suggestions, setSuggestions] = useState<Sick[]>([]);
-  const [sugeestionIndex, setSuggestionIndex] = useState(-1);
-  const settimeout = useRef<NodeJS.Timeout | undefined>();
-  const prevQuery = useRef<string>('');
+  const { input, suggestions, handleOnChange, hasNoSuggestions, prevQuery } =
+    useLazyFetch();
 
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-    if (e.target.value === '') {
-      return;
-    }
+  const {
+    handleKeyDown,
+    handleOnFocus,
+    handleOnBlur,
+    selectedIndex,
+    isOpenDropdown,
+    goToSuggestion,
+  } = useHandleInputEvent(suggestions);
 
-    clearTimeout(settimeout.current);
-    settimeout.current = setTimeout(async () => {
-      prevQuery.current = e.target.value;
-      const sicks = await getSicksQuery(e.target.value);
-      setSuggestions([...sicks]);
-    }, DEBOUNCING_TIME);
-  };
   return (
     <>
       <Wrapper>
         <input
-          onFocus={() => setIsOpenDropdown(true)}
-          onBlur={() => setIsOpenDropdown(false)}
+          onFocus={handleOnFocus}
+          onBlur={handleOnBlur}
           onChange={handleOnChange}
-          onKeyDown={handleKeyDown}
+          onKeyDown={e => handleKeyDown(e)}
         />
       </Wrapper>
       {isOpenDropdown && (
@@ -43,11 +33,15 @@ function SearchInput() {
           </li>
           {hasNoSuggestions && <BoldText>검색어 없음</BoldText>}
           {!hasNoSuggestions &&
-            suggestions.map(({ sickCd, sickNm }) => (
+            suggestions.map(({ sickCd, sickNm }, index) => (
               <SuggestionDropdown
                 key={sickCd}
                 sickNm={sickNm}
                 target={prevQuery.current}
+                isSelected={index === selectedIndex}
+                handleOnClick={e =>
+                  goToSuggestion(e, suggestions[index].sickNm)
+                }
               />
             ))}
         </StyledSuggestionBox>
@@ -81,12 +75,23 @@ const StyledSuggestionBox = styled.ul`
   position: absolute;
   top: 7rem;
   width: 50rem;
-  padding: 2rem;
+
   background-color: #ffffff;
   border-radius: 2rem;
   font-size: 1.5rem;
+  overflow: hidden;
+
+  a,
   li {
+    display: block;
     width: 100%;
-    height: 3rem;
+    height: 4rem;
+    padding: 0 2rem;
+    line-height: 4rem;
+    text-decoration: none;
+    color: #000000;
+  }
+  .selected {
+    background-color: #eeeeee;
   }
 `;

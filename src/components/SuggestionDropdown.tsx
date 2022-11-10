@@ -1,11 +1,19 @@
+import { MouseEvent, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 
 interface Props {
   sickNm: string;
   target: string;
+  isSelected: boolean;
+  handleOnClick: MouseEventHandler;
 }
 
-const SuggestionDropdown = ({ sickNm, target }: Props) => {
+const SuggestionDropdown = ({
+  sickNm,
+  target,
+  isSelected,
+  handleOnClick,
+}: Props) => {
   const changeToBoldText = (target: string, str: string) => {
     const index = str.indexOf(target);
     return [
@@ -16,7 +24,7 @@ const SuggestionDropdown = ({ sickNm, target }: Props) => {
   };
 
   return (
-    <li>
+    <li className={isSelected ? 'selected' : ''} onClick={handleOnClick}>
       {changeToBoldText(target, sickNm)[SUGGESTIONS.PREV]}
       <BoldText>
         {changeToBoldText(target, sickNm)[SUGGESTIONS.TARGET]}
