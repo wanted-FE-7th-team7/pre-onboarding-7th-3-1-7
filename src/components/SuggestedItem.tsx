@@ -7,8 +7,7 @@ interface Props {
 }
 
 function SuggesteadItem({ text, boldTargetText }: Props) {
-  const reg = new RegExp(boldTargetText, 'i');
-  const startIndex = text.search(reg);
+  const startIndex = text.indexOf(boldTargetText);
   const endIndex = startIndex + boldTargetText.length;
 
   return (
