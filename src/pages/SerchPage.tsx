@@ -4,7 +4,7 @@ import { getSick } from '../apis/getSick';
 import InputGroup from '../components/InputGroup';
 import SuggestedItem from '../components/SuggestedItem';
 
-interface suggestedProps {
+interface Sick {
   sickCd: string;
   sickNm: string;
 }
@@ -15,7 +15,7 @@ function SerchPage() {
 
   useEffect(() => getSick(searchSick, setsickList), [searchSick]);
 
-  const suggestedSickList = sickList.filter((sick: suggestedProps) =>
+  const suggestedSickList = sickList.filter((sick: Sick) =>
     sick.sickNm.includes(searchSick)
   );
 
@@ -26,13 +26,21 @@ function SerchPage() {
         <p>온라인으로 참여하기</p>
       </div>
 
-      <div className="search-box">
+      <S.InputLayout>
         <InputGroup
           placeholder="질환명을 입력해주세요"
           value={searchSick}
           setValue={setSearchSick}
         />
-      </div>
+      </S.InputLayout>
+
+      {searchSick.length > 0 && suggestedSickList.length === 0 && (
+        <div className="suggest-box">
+          <SuggestedItem text={searchSick} boldTargetText={searchSick} />
+
+          <div className="suggest-start">일치하는 검색어가 없습니다</div>
+        </div>
+      )}
 
       {searchSick.length > 0 && suggestedSickList.length > 0 && (
         <div className="suggest-box">
@@ -40,19 +48,13 @@ function SerchPage() {
 
           <div className="suggest-start">추천 검색어</div>
 
-          {suggestedSickList.map((sick: suggestedProps) => (
+          {suggestedSickList.map((sick: Sick) => (
             <SuggestedItem
               key={sick.sickCd}
               text={sick.sickNm}
               boldTargetText={searchSick}
             />
           ))}
-        </div>
-      )}
-
-      {searchSick.length > 0 && suggestedSickList.length === 0 && (
-        <div className="suggest-box">
-          <div className="suggest-start">일치하는 검색어가 없습니다</div>
         </div>
       )}
     </S.SerchLayout>
@@ -64,7 +66,6 @@ const S = {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 
     background-color: #d0e8fd;
 
@@ -84,25 +85,11 @@ const S = {
       margin-bottom: 5rem;
     }
 
-    .search-box {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      width: 75rem;
-      height: 8rem;
-
-      background-color: white;
-      border-radius: 100px;
-
-      margin-bottom: 1rem;
-    }
-
     .suggest-box {
       padding: 2rem;
 
       width: 75rem;
-      min-height: 20rem;
+      min-height: 10rem;
       height: auto;
 
       white-space: normal;
@@ -115,6 +102,20 @@ const S = {
       font-size: 2rem;
       color: gray;
     }
+  `,
+
+  InputLayout: styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 75rem;
+    height: 8rem;
+
+    background-color: white;
+    border-radius: 100px;
+
+    margin-bottom: 1rem;
   `,
 };
 

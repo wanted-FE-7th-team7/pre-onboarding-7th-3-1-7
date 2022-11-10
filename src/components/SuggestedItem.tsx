@@ -25,7 +25,7 @@ const S = {
     font-size: 2rem;
 
     .test-bold {
-      font-weight: 700;
+      font-weight: 800;
     }
   `,
 };

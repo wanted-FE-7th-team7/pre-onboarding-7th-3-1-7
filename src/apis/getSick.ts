@@ -1,10 +1,5 @@
 import axios from 'axios';
 
-export interface Sick {
-  sickCd: string;
-  sickNm: string;
-}
-
 export function getSick(serchKeyword: string, setsickList: any) {
   axios
     .get(`http://localhost:4000/sick?q=${serchKeyword}`)
